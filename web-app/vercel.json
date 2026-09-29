@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "functions": {
+    "index.php": {
+      "runtime": "vercel-php@0.7.3"
+    }
+  },
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/uploads/(.*)",
+      "dest": "/uploads/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.php"
+    }
+  ],
+  "env": {
+    "APP_ENV": "production",
+    "DB_CONNECTION": "sqlite"
+  }
+}

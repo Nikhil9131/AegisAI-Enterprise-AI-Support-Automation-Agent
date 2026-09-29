@@ -100,6 +100,15 @@ if ($db_connection === 'mysql') {
 	);
 } else {
 	$sqlite_path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'aegis.db';
+	if (getenv('VERCEL') || !empty($_ENV['VERCEL'])) {
+		$tmp_db = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'aegis.db';
+		if (!file_exists($tmp_db) && file_exists($sqlite_path)) {
+			@copy($sqlite_path, $tmp_db);
+		}
+		if (file_exists($tmp_db)) {
+			$sqlite_path = $tmp_db;
+		}
+	}
 	$db['default'] = array(
 		'dsn'	=> 'sqlite:' . $sqlite_path,
 		'hostname' => '',
