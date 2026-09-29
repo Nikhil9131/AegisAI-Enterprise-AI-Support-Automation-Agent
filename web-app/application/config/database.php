@@ -99,11 +99,29 @@ if ($db_connection === 'mysql') {
 		'save_queries' => TRUE
 	);
 } else {
-	$sqlite_path = dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'aegis.db';
-	if (getenv('VERCEL') || !empty($_ENV['VERCEL'])) {
+	$candidates = array(
+		(defined('FCPATH') ? FCPATH : '') . 'database' . DIRECTORY_SEPARATOR . 'aegis.db',
+		(defined('APPPATH') ? APPPATH : '') . 'database' . DIRECTORY_SEPARATOR . 'aegis.db',
+		(defined('APPPATH') ? dirname(APPPATH) : '') . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'aegis.db',
+		dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'aegis.db',
+		dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'web-app' . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'aegis.db',
+		sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'aegis.db',
+	);
+
+	$source_db = '';
+	foreach ($candidates as $cand) {
+		if ($cand && file_exists($cand)) {
+			$source_db = $cand;
+			break;
+		}
+	}
+
+	$sqlite_path = $source_db ?: (dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'aegis.db');
+
+	if (getenv('VERCEL') || !empty($_ENV['VERCEL']) || getenv('NOW_REGION')) {
 		$tmp_db = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'aegis.db';
-		if (!file_exists($tmp_db) && file_exists($sqlite_path)) {
-			@copy($sqlite_path, $tmp_db);
+		if (!file_exists($tmp_db) && $source_db && file_exists($source_db)) {
+			@copy($source_db, $tmp_db);
 		}
 		if (file_exists($tmp_db)) {
 			$sqlite_path = $tmp_db;

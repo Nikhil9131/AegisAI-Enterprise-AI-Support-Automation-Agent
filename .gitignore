@@ -31,6 +31,8 @@ ai-service/data/qdrant/
 
 # Database files
 database/*.db
+!database/aegis.db
+!web-app/database/aegis.db
 *.sqlite3
 
 # Uploads & Temporary files
