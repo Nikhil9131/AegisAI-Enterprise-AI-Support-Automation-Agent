@@ -23,7 +23,23 @@ def get_chat_model():
                 temperature=0.2
             )
         except Exception as e:
-            print(f"[LLMFactory] Gemini init error: {e}")
+            print(f"[LLMFactory] langchain_google_genai not found or failed: {e}. Trying direct google.generativeai...")
+            try:
+                import google.generativeai as genai
+                genai.configure(api_key=settings.GEMINI_API_KEY)
+                class DirectGeminiModel:
+                    def __init__(self, model_name):
+                        m_name = model_name if "gemini" in model_name else "gemini-1.5-pro"
+                        self.model = genai.GenerativeModel(m_name)
+                    def invoke(self, messages):
+                        prompt = "\n\n".join([m.content for m in messages])
+                        res = self.model.generate_content(prompt)
+                        class Wrapper:
+                            content = res.text
+                        return Wrapper()
+                return DirectGeminiModel(settings.DEFAULT_MODEL)
+            except Exception as e2:
+                print(f"[LLMFactory] Gemini direct init error: {e2}")
 
     elif settings.LLM_PROVIDER == "anthropic" and settings.ANTHROPIC_API_KEY:
         try:

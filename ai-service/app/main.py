@@ -31,6 +31,7 @@ async def lifespan(app: FastAPI):
     print(f"[VECTORS] Current vectors in collection: {current_vectors}")
     
     if current_vectors == 0:
+        sample_dir = Path(settings.SAMPLE_DOCS_DIR)
         if not sample_dir.exists():
             for candidate in [
                 Path.cwd() / "sample_docs",
