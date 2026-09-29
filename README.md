@@ -137,31 +137,6 @@ php -S 127.0.0.1:8000 -t web-app
 
 ---
 
-## ☁️ Deployment Guide
-
-### Deploying Frontend to Vercel
-The repository includes a ready-to-deploy [vercel.json](file:///c:/Users/nikhi/OneDrive/Desktop/AegisAI%20%E2%80%94%20Enterprise%20AI%20Support%20&%20Automation%20Agent/vercel.json):
-1. Import this repository in [Vercel](https://vercel.com).
-2. Set Environment Variables in Vercel:
-   - `APP_ENV`: `production`
-   - `AI_SERVICE_URL`: `<YOUR_RENDER_BACKEND_URL>` (e.g. `https://aegis-ai-backend.onrender.com`)
-   - `DB_CONNECTION`: `sqlite` (or `mysql` if using a remote MySQL instance)
-3. Deploy! Vercel automatically routes requests using the `vercel-php` runtime.
-
-### Deploying Backend to Render
-The repository includes [render.yaml](file:///c:/Users/nikhi/OneDrive/Desktop/AegisAI%20%E2%80%94%20Enterprise%20AI%20Support%20&%20Automation%20Agent/render.yaml):
-1. Connect this repository in [Render](https://render.com).
-2. Choose **Blueprint** deployment (Render automatically detects `render.yaml`) or create a **Web Service**:
-   - Runtime: `Python`
-   - Build Command: `pip install --upgrade pip && pip install -r ai-service/requirements.txt && python database/init_db.py`
-   - Start Command: `python -m uvicorn app.main:app --app-dir ai-service --host 0.0.0.0 --port $PORT`
-3. Add Environment Variables:
-   - `GEMINI_API_KEY` (or `OPENAI_API_KEY`)
-   - `QDRANT_URL`: `:memory:`
-4. Deploy! Render will build and host your multi-agent AI API with interactive Swagger docs at `/docs`.
-
----
-
 ## 🧪 Automated Test Suite
 
 Run the full end-to-end multi-agent test suite:
