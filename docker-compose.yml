@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # 1. MySQL Enterprise Database
+  mysql:
+    image: mysql:8.0
+    container_name: aegis_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: aegis_ai
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./database/seeds.sql:/docker-entrypoint-initdb.d/02_seeds.sql
+      - mysql_data:/var/lib/mysql
+    networks:
+      - aegis_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: aegis_qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - aegis_network
+
+  # 3. Python FastAPI Multi-Agent AI Microservice
+  ai-service:
+    build:
+      context: .
+      dockerfile: ai-service/Dockerfile
+    container_name: aegis_ai_service
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=aegis_ai
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - QDRANT_URL=http://qdrant:6333
+      - QDRANT_COLLECTION=aegis_enterprise_kb
+      - LLM_PROVIDER=gemini
+      - DEFAULT_MODEL=gemini-1.5-pro
+      - SAMPLE_DOCS_DIR=/sample_docs
+    ports:
+      - "8001:8001"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+    networks:
+      - aegis_network
+
+  # 4. CodeIgniter 3 Web Application (PHP 8.2 + Apache)
+  web-app:
+    build:
+      context: ./web-app
+      dockerfile: Dockerfile
+    container_name: aegis_web_app
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=aegis_ai
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - AI_SERVICE_URL=http://ai-service:8001
+      - APP_URL=http://localhost:8080
+    ports:
+      - "8000:80"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    networks:
+      - aegis_network
+
+  # 5. Nginx Unified Gateway / Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: aegis_gateway
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web-app
+      - ai-service
+    networks:
+      - aegis_network
+
+volumes:
+  mysql_data:
+  qdrant_data:
+
+networks:
+  aegis_network:
+    driver: bridge

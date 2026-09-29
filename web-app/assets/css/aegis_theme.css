@@ -1,0 +1,526 @@
+/* ==============================================================================
+   AEGIS AI — Enterprise Light Bluish Theme
+   Corporate SaaS Design System (Clean, Professional, Cohesive)
+   ============================================================================== */
+
+:root {
+    --aegis-primary: #2563eb;
+    --aegis-primary-hover: #1d4ed8;
+    --aegis-primary-light: #eff6ff;
+    --aegis-primary-subtle: #dbeafe;
+    --aegis-primary-border: #bfdbfe;
+    
+    --aegis-secondary: #475569;
+    --aegis-success: #10b981;
+    --aegis-success-bg: #ecfdf5;
+    --aegis-warning: #f59e0b;
+    --aegis-warning-bg: #fffbeb;
+    --aegis-danger: #ef4444;
+    --aegis-danger-bg: #fef2f2;
+    --aegis-info: #0ea5e9;
+    --aegis-info-bg: #f0f9ff;
+    
+    --aegis-bg-main: #f4f7fb;
+    --aegis-bg-surface: #ffffff;
+    --aegis-bg-sidebar: #f8fafc;
+    --aegis-bg-hover: #f1f5f9;
+    
+    --aegis-text-main: #0f172a;
+    --aegis-text-muted: #64748b;
+    --aegis-text-light: #94a3b8;
+    
+    --aegis-border: #e2e8f0;
+    --aegis-border-light: #f1f5f9;
+    
+    --aegis-shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+    --aegis-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+    --aegis-shadow-lg: 0 10px 15px -3px rgba(37, 99, 235, 0.07), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
+    
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-full: 9999px;
+}
+
+body {
+    background-color: var(--aegis-bg-main);
+    color: var(--aegis-text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Layout Architecture */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: var(--aegis-bg-surface);
+    border-right: 1px solid var(--aegis-border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background-color: var(--aegis-bg-main);
+}
+
+.topbar {
+    height: 64px;
+    background: var(--aegis-bg-surface);
+    border-bottom: 1px solid var(--aegis-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+.content-body {
+    padding: 28px;
+    flex: 1;
+}
+
+/* Sidebar Elements */
+.brand-header {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--aegis-border);
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--aegis-text-main);
+}
+
+.brand-icon-box {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.brand-text {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: #0f172a;
+}
+
+.brand-badge {
+    font-size: 10px;
+    background-color: var(--aegis-primary-light);
+    color: var(--aegis-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    border: 1px solid var(--aegis-primary-border);
+}
+
+.sidebar-nav {
+    padding: 16px 12px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.nav-section-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--aegis-text-light);
+    padding: 12px 12px 6px 12px;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--aegis-secondary);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    margin-bottom: 2px;
+}
+
+.sidebar-item:hover {
+    background-color: var(--aegis-bg-hover);
+    color: var(--aegis-primary);
+}
+
+.sidebar-item.active {
+    background-color: var(--aegis-primary-light);
+    color: var(--aegis-primary);
+    font-weight: 600;
+}
+
+.sidebar-item i {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid var(--aegis-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar-sm {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background-color: var(--aegis-primary-subtle);
+    color: var(--aegis-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.user-info-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--aegis-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-role-label {
+    font-size: 11px;
+    color: var(--aegis-text-muted);
+}
+
+/* Cards & Surfaces */
+.aegis-card {
+    background-color: var(--aegis-bg-surface);
+    border: 1px solid var(--aegis-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--aegis-shadow);
+    margin-bottom: 24px;
+}
+
+.aegis-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--aegis-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.aegis-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--aegis-text-main);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aegis-card-body {
+    padding: 20px;
+}
+
+/* Metric / Stat Cards */
+.stat-card {
+    background-color: var(--aegis-bg-surface);
+    border: 1px solid var(--aegis-border);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    box-shadow: var(--aegis-shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stat-card:hover {
+    box-shadow: var(--aegis-shadow-lg);
+    border-color: var(--aegis-primary-border);
+}
+
+.stat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.stat-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--aegis-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.stat-icon.primary { background-color: var(--aegis-primary-light); color: var(--aegis-primary); }
+.stat-icon.success { background-color: var(--aegis-success-bg); color: var(--aegis-success); }
+.stat-icon.warning { background-color: var(--aegis-warning-bg); color: var(--aegis-warning); }
+.stat-icon.danger { background-color: var(--aegis-danger-bg); color: var(--aegis-danger); }
+.stat-icon.info { background-color: var(--aegis-info-bg); color: var(--aegis-info); }
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--aegis-text-main);
+    margin-bottom: 4px;
+}
+
+.stat-footer {
+    font-size: 12px;
+    color: var(--aegis-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Chat & AI Interface */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 160px);
+    background-color: var(--aegis-bg-surface);
+    border: 1px solid var(--aegis-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--aegis-shadow);
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--aegis-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fafcff;
+}
+
+.chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: #f8fafc;
+}
+
+.chat-message {
+    display: flex;
+    gap: 14px;
+    max-width: 85%;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+}
+
+.chat-bubble {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.chat-message.user .chat-bubble {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    border-bottom-right-radius: 2px;
+    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.chat-message.assistant .chat-bubble {
+    background-color: #ffffff;
+    color: var(--aegis-text-main);
+    border: 1px solid var(--aegis-border);
+    border-bottom-left-radius: 2px;
+    box-shadow: var(--aegis-shadow-sm);
+}
+
+.agent-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    background: var(--aegis-primary-light);
+    color: var(--aegis-primary);
+    border: 1px solid var(--aegis-primary-border);
+}
+
+.sources-box {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background-color: var(--aegis-bg-main);
+    border: 1px solid var(--aegis-border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+}
+
+.citation-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background-color: #ffffff;
+    border: 1px solid var(--aegis-border);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--aegis-primary);
+    margin: 3px 3px 0 0;
+}
+
+.chat-input-bar {
+    padding: 16px 20px;
+    background-color: var(--aegis-bg-surface);
+    border-top: 1px solid var(--aegis-border);
+}
+
+/* Badges & Tables */
+.badge-status {
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11.5px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-status.OPEN { background-color: #e0f2fe; color: #0284c7; }
+.badge-status.IN_PROGRESS { background-color: #fef3c7; color: #d97706; }
+.badge-status.RESOLVED { background-color: #d1fae5; color: #059669; }
+.badge-status.CLOSED { background-color: #f1f5f9; color: #64748b; }
+.badge-status.ESCALATED { background-color: #fee2e2; color: #dc2626; }
+.badge-status.WAITING_FOR_USER { background-color: #ede9fe; color: #7c3aed; }
+
+.badge-priority {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.badge-priority.LOW { background-color: #f1f5f9; color: #475569; }
+.badge-priority.MEDIUM { background-color: #e0f2fe; color: #0284c7; }
+.badge-priority.HIGH { background-color: #fed7aa; color: #ea580c; }
+.badge-priority.CRITICAL { background-color: #fecaca; color: #dc2626; }
+
+.aegis-table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.aegis-table th {
+    background-color: #f8fafc;
+    color: var(--aegis-text-muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--aegis-border);
+}
+
+.aegis-table td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    font-size: 13.5px;
+    border-bottom: 1px solid var(--aegis-border);
+}
+
+.aegis-table tr:hover td {
+    background-color: #fbfdff;
+}
+
+/* Buttons & Controls */
+.btn-aegis-primary {
+    background-color: var(--aegis-primary);
+    color: #ffffff;
+    border: 1px solid var(--aegis-primary);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    transition: all 0.15s ease;
+}
+
+.btn-aegis-primary:hover {
+    background-color: var(--aegis-primary-hover);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.btn-aegis-outline {
+    background-color: #ffffff;
+    color: var(--aegis-secondary);
+    border: 1px solid var(--aegis-border);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    transition: all 0.15s ease;
+}
+
+.btn-aegis-outline:hover {
+    background-color: var(--aegis-bg-hover);
+    color: var(--aegis-text-main);
+    border-color: #cbd5e1;
+}

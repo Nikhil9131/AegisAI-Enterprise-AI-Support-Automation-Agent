@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: aegis-ai-backend
+    runtime: python
+    buildCommand: "pip install --upgrade pip && pip install -r ai-service/requirements.txt && python database/init_db.py"
+    startCommand: "python -m uvicorn app.main:app --app-dir ai-service --host 0.0.0.0 --port $PORT"
+    plan: free
+    region: oregon
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: APP_ENV
+        value: production
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: QDRANT_URL
+        value: ":memory:"
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: DEFAULT_MODEL
+        value: gemini-1.5-pro
+      - key: SAMPLE_DOCS_DIR
+        value: "./sample_docs"
+      - key: JWT_SECRET
+        generateValue: true

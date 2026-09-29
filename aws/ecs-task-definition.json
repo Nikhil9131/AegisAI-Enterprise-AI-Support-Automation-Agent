@@ -1,0 +1,61 @@
+{
+  "family": "aegis-enterprise-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/aegis-production-ecs-execution-role",
+  "taskRoleArn": "arn:aws:iam::ACCOUNT_ID:role/aegis-production-ecs-task-role",
+  "containerDefinitions": [
+    {
+      "name": "ai-service",
+      "image": "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/aegis-ai-service:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8001,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "APP_ENV", "value": "production" },
+        { "name": "DB_CONNECTION", "value": "mysql" },
+        { "name": "LLM_PROVIDER", "value": "gemini" },
+        { "name": "DEFAULT_MODEL", "value": "gemini-1.5-pro" },
+        { "name": "QDRANT_URL", "value": "http://qdrant.internal:6333" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/aegis-production",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ai-service"
+        }
+      }
+    },
+    {
+      "name": "web-app",
+      "image": "ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/aegis-web-app:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        { "name": "APP_ENV", "value": "production" },
+        { "name": "DB_CONNECTION", "value": "mysql" },
+        { "name": "AI_SERVICE_URL", "value": "http://127.0.0.1:8001" }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/aegis-production",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "web-app"
+        }
+      }
+    }
+  ]
+}

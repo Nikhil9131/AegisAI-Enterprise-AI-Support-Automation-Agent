@@ -1,0 +1,21 @@
+# AEGIS NEW HIRE IT & CLOUD ONBOARDING GUIDE
+Document ID: IT-ONB-2026-V1
+Department: IT Operations & People Team
+
+1. WELCOME TO AEGIS ENTERPRISE
+Welcome aboard! On your first day, your primary IT objective is to configure your corporate workstation, authenticate your Okta identity, and establish encrypted access to your team resources.
+
+2. DAY 1 SETUP CHECKLIST
+2.1 Unbox hardware and power on. Connect to your local Wi-Fi.
+2.2 Setup Apple ID / Microsoft Account using your corporate email (@aegis.enterprise).
+2.3 The device will automatically enrol in Aegis Mobile Device Management (MDM - Jamf / Microsoft Intune).
+2.4 Sign in to https://login.aegis.enterprise to establish your primary password and register your Okta Verify MFA on your mobile device.
+2.5 Launch the Aegis App Catalog and install mandatory productivity apps: Slack, Zoom, 1Password, Google Chrome, and WireGuard VPN Client.
+
+3. DEVELOPMENT ENVIRONMENT PROVISIONING
+3.1 Engineering teams receive automated GitHub Enterprise invitations with single sign-on mapping.
+3.2 AWS sandbox credentials are provisioned through AWS IAM Identity Center (AWS SSO) at https://aegis.awsapps.com/start.
+3.3 Never commit AWS access keys or personal tokens to repositories. Use `aws sso login` to retrieve temporary session credentials.
+
+4. GETTING HELP
+If you encounter any blockers during onboarding, you can reach out to our AI Assistant 24/7 or join the #it-onboarding-help channel on Slack.
