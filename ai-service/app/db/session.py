@@ -17,7 +17,18 @@ def get_connection():
             cursorclass=pymysql.cursors.DictCursor
         )
     else:
-        conn = sqlite3.connect(settings.DB_SQLITE_PATH)
+        from pathlib import Path
+        db_path = Path(settings.DB_SQLITE_PATH)
+        if not db_path.exists():
+            for candidate in [
+                Path.cwd() / "database" / "aegis.db",
+                Path.cwd().parent / "database" / "aegis.db",
+                Path(__file__).resolve().parent.parent.parent / "database" / "aegis.db"
+            ]:
+                if candidate.exists():
+                    db_path = candidate
+                    break
+        conn = sqlite3.connect(str(db_path))
         conn.row_factory = sqlite3.Row
         return conn
 
