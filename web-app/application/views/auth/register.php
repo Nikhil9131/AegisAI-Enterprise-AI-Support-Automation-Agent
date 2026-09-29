@@ -1,4 +1,4 @@
-<form action="<?php echo base_url('auth/process_register'); ?>" method="POST">
+<form action="/auth/process_register" method="POST">
     <div class="mb-3">
         <label for="full_name" class="form-label small fw-semibold">Full Legal Name</label>
         <div class="input-group">
@@ -51,5 +51,5 @@
 
 <div class="text-center mt-3 pt-3 border-top">
     <span class="small text-muted">Already registered?</span>
-    <a href="<?php echo base_url('auth/login'); ?>" class="small fw-semibold text-primary text-decoration-none ms-1">Sign In</a>
+    <a href="/auth/login" class="small fw-semibold text-primary text-decoration-none ms-1">Sign In</a>
 </div>

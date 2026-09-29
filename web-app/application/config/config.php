@@ -24,15 +24,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 if (isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST'])) {
-    $is_https = (
-        (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on') ||
-        (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') ||
-        (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && strtolower($_SERVER['HTTP_X_FORWARDED_SSL']) === 'on') ||
-        (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443) ||
-        (!empty($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'vercel.app') !== false)
-    );
-    $proto = $is_https ? 'https://' : 'http://';
-    $config['base_url'] = $proto . $_SERVER['HTTP_HOST'] . '/';
+    $host = $_SERVER['HTTP_HOST'];
+    $is_local = (strpos($host, 'localhost') !== false || strpos($host, '127.0.0.1') !== false);
+    $proto = $is_local ? 'http://' : 'https://';
+    $config['base_url'] = $proto . $host . '/';
 } else {
     $config['base_url'] = getenv('APP_URL') ? rtrim(getenv('APP_URL'), '/') . '/' : 'http://127.0.0.1:8000/';
 }

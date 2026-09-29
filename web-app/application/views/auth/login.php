@@ -1,4 +1,4 @@
-<form action="<?php echo base_url('auth/process_login'); ?>" method="POST">
+<form action="/auth/process_login" method="POST">
     <div class="mb-3">
         <label for="email" class="form-label small fw-semibold">Corporate Email Address</label>
         <div class="input-group">
@@ -10,7 +10,7 @@
     <div class="mb-3">
         <div class="d-flex justify-content-between align-items-center mb-1">
             <label for="password" class="form-label small fw-semibold mb-0">Password</label>
-            <a href="<?php echo base_url('auth/forgot_password'); ?>" class="small text-decoration-none text-primary">Forgot password?</a>
+            <a href="/auth/forgot_password" class="small text-decoration-none text-primary">Forgot password?</a>
         </div>
         <div class="input-group">
             <span class="input-group-text bg-light text-muted border-end-0"><i class="bi bi-lock"></i></span>
@@ -48,7 +48,7 @@
 
 <div class="text-center mt-4">
     <span class="small text-muted">Don't have an account?</span>
-    <a href="<?php echo base_url('auth/register'); ?>" class="small fw-semibold text-primary text-decoration-none ms-1">Register new user</a>
+    <a href="/auth/register" class="small fw-semibold text-primary text-decoration-none ms-1">Register new user</a>
 </div>
 
 <script>

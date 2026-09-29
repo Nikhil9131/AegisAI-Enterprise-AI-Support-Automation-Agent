@@ -1,4 +1,4 @@
-<form action="<?php echo base_url('auth/process_forgot_password'); ?>" method="POST">
+<form action="/auth/process_forgot_password" method="POST">
     <div class="mb-3">
         <label for="email" class="form-label small fw-semibold">Corporate Email Address</label>
         <div class="input-group">
@@ -14,7 +14,7 @@
 </form>
 
 <div class="text-center mt-3 pt-3 border-top">
-    <a href="<?php echo base_url('auth/login'); ?>" class="small fw-semibold text-primary text-decoration-none">
+    <a href="/auth/login" class="small fw-semibold text-primary text-decoration-none">
         <i class="bi bi-arrow-left me-1"></i> Back to Sign In
     </a>
 </div>
