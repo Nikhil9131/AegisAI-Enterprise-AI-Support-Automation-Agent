@@ -1,0 +1,20 @@
+# AEGIS ENTERPRISE NETWORK & ZERO TRUST TROUBLESHOOTING GUIDE
+Document ID: NET-OPS-2026-V5
+Department: Global Infrastructure & SRE Team
+
+1. ENTERPRISE NETWORK ARCHITECTURE
+Aegis operates an isolated Zero-Trust Network Architecture (ZTNA). Every request is verified, authorized, and encrypted regardless of physical office location or home network.
+
+2. DNS & RESOLUTION ISSUES
+2.1 Internal domains (*.internal.aegis.enterprise) resolve strictly through our internal DNS resolvers (10.240.0.2 and 10.240.0.3).
+2.2 If internal microservices fail with NXDOMAIN:
+- Check if your local DNS cache has stale records. Run `dscacheutil -flushcache; sudo killall -HUP mDNSResponder` on macOS, or `ipconfig /flushdns` on Windows.
+- Confirm VPN connection is active; internal DNS servers are only accessible within the WireGuard tunnel.
+
+3. PACKET LOSS & LATENCY OPTIMIZATION
+3.1 Maximum Transmission Unit (MTU): On residential broadband with PPPoE or mobile hotspots, WireGuard default MTU (1420) may cause packet fragmentation. Lower the MTU in `aegis-client.conf` to 1360 or 1280.
+3.2 Bandwidth saturation: Video calls and streaming media should be kept on local interfaces; internal VPN routes only corporate subnets.
+
+4. 802.1X CORPORATE WI-FI IN OFFICE BUILDINGS
+4.1 In all Aegis offices, connect to SSID: "Aegis-Corporate-Secure".
+4.2 Certificate-based EAP-TLS authentication will use your installed corporate machine certificate. Do not enter personal passwords manually.

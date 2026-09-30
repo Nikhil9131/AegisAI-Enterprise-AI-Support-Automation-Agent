@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-success-subtle text-success border"><i class="bi bi-circle-fill me-1" style="font-size: 7px;"></i> AI Service Online</span>
+                    <span id="aiServiceStatusBadge" class="badge bg-primary-subtle text-primary border" title="Checking AI Microservice status..."><i class="bi bi-circle-half me-1" style="font-size: 7px;"></i> Initializing Service...</span>
                     <button class="btn btn-sm btn-light border" onclick="clearChat()" title="Clear Current View"><i class="bi bi-arrow-clockwise"></i></button>
                 </div>
             </div>
@@ -208,21 +208,36 @@ async function handleChatSubmit(e) {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
             }
         });
 
-        const data = await res.json();
+        let data;
+        const resText = await res.text();
+        try {
+            data = JSON.parse(resText);
+        } catch (jsonErr) {
+            throw new Error(`Server returned status ${res.status}: ${resText.substring(0, 100)}`);
+        }
+
         removeBubble(typingId);
 
         if (data.success) {
             appendAssistantBubble(data.answer, data.metadata, data.message_id, data.log_id);
         } else {
-            appendAssistantBubble("Error: " + (data.error || "Unable to reach AI service."), { agent_selected: 'System Error', latency_ms: 0 });
+            appendAssistantBubble("System Notice: " + (data.error || "Unable to retrieve response from AI engine."), { agent_selected: 'System Notice', latency_ms: 0 });
         }
     } catch (err) {
         removeBubble(typingId);
-        appendAssistantBubble("Network or server connection failed. Please ensure FastAPI AI service is active on port 8001.", { agent_selected: 'Network Error', latency_ms: 0 });
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        let noticeText = "Service Notice: ";
+        if (isLocalhost) {
+            noticeText += "Could not reach FastAPI service on port 8001. Please ensure Python AI microservice is active or rely on the embedded RAG engine.";
+        } else {
+            noticeText += "Connection timed out or cloud service is warming up. Please try again in a few moments, or check AI_SERVICE_URL.";
+        }
+        appendAssistantBubble(noticeText, { agent_selected: 'System Notice', latency_ms: 0, model: 'aegis-core' });
     } finally {
         sendBtn.disabled = false;
         scrollToBottom();
@@ -243,7 +258,8 @@ async function handleImageUpload(e) {
             method: 'POST',
             body: formData,
             headers: {
-                'X-Requested-With': 'XMLHttpRequest'
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
             }
         });
         const data = await res.json();
@@ -315,7 +331,7 @@ function appendAssistantBubble(text, meta = {}, msgId = null, logId = null, imag
                     <i class="bi bi-robot"></i> ${escapeHtml(meta.agent_selected || 'Supervisor -> RAG Agent')}
                 </span>
                 <div class="text-muted" style="font-size: 11px;">
-                    <i class="bi bi-stopwatch"></i> ${meta.latency_ms || 380}ms &bull; ${escapeHtml(meta.model || 'gemini-1.5-pro')}
+                    <i class="bi bi-stopwatch"></i> ${meta.latency_ms !== undefined && meta.latency_ms !== null ? meta.latency_ms : 180}ms &bull; ${escapeHtml(meta.model || 'gemini-1.5-pro')}
                 </div>
             </div>
             ${imageHtml}
@@ -380,10 +396,37 @@ function escapeHtml(str) {
 }
 
 function formatMarkdown(text) {
-    // Basic format: newlines and bold
+    // Basic format: newlines, bold, list bullets
     let html = escapeHtml(text);
     html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/`([^`]+)`/g, '<code class="bg-light px-1 py-0.5 rounded border">$1</code>');
     html = html.replace(/\n/g, '<br>');
     return html;
 }
+
+async function checkAiServiceStatus() {
+    const badge = document.getElementById('aiServiceStatusBadge');
+    if (!badge) return;
+    try {
+        const res = await fetch('<?php echo base_url("assistant/service_status"); ?>', {
+            headers: { 'Accept': 'application/json' }
+        });
+        const data = await res.json();
+        if (data.connected) {
+            badge.className = 'badge bg-success-subtle text-success border';
+            badge.innerHTML = '<i class="bi bi-circle-fill me-1" style="font-size: 7px;"></i> AI Microservice Online';
+            badge.title = 'FastAPI Microservice online at ' + (data.url || 'port 8001');
+        } else {
+            badge.className = 'badge bg-primary-subtle text-primary border';
+            badge.innerHTML = '<i class="bi bi-shield-check me-1"></i> Standalone RAG Active';
+            badge.title = 'Embedded Enterprise Policy Engine is active with zero downtime.';
+        }
+    } catch (e) {
+        badge.className = 'badge bg-primary-subtle text-primary border';
+        badge.innerHTML = '<i class="bi bi-shield-check me-1"></i> Standalone RAG Active';
+        badge.title = 'Embedded Enterprise Policy Engine is active.';
+    }
+}
+document.addEventListener('DOMContentLoaded', checkAiServiceStatus);
 </script>

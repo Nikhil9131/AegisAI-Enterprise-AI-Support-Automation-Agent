@@ -35,8 +35,11 @@ class Assistant extends MY_Controller {
      * AJAX endpoint: Send chat query to LangGraph Multi-Agent AI Service
      */
     public function send_message() {
-        if (!$this->input->is_ajax_request() && strpos($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json') === false) {
-            show_error('Direct script access not allowed', 400);
+        // Allow AJAX, JSON accept, or valid POST request
+        if ($this->input->method() !== 'post') {
+            $this->output->set_status_header(405)
+                         ->set_content_type('application/json')
+                         ->set_output(json_encode(array('success' => false, 'error' => 'Method not allowed')));
             return;
         }
 
@@ -186,6 +189,21 @@ class Assistant extends MY_Controller {
 
         $this->output->set_content_type('application/json')->set_output(json_encode(array(
             'success' => true
+        )));
+    }
+
+    /**
+     * AJAX endpoint: Live health and status check of the AI microservice
+     */
+    public function service_status() {
+        $health = $this->aegis_ai_client->health();
+        $is_online = !empty($health['status']) && ($health['status'] === 'healthy' || $health['status'] === 'ok');
+
+        $this->output->set_content_type('application/json')->set_output(json_encode(array(
+            'connected' => $is_online,
+            'url'       => $this->aegis_ai_client->get_api_base_url(),
+            'mode'      => $is_online ? 'MICROSERVICE' : 'STANDALONE_FALLBACK',
+            'details'   => $health
         )));
     }
 }

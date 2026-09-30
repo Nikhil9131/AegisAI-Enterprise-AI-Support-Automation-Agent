@@ -1,0 +1,29 @@
+# AEGIS ENTERPRISE IT SECURITY POLICY (2026 REVISION)
+Document ID: SEC-POL-2026-V4
+Classification: INTERNAL CONFIDENTIAL
+Effective Date: January 1, 2026
+Approved By: Information Security Office & Chief Information Officer
+
+1. PURPOSE & SCOPE
+This document outlines the mandatory information security controls for all Aegis Enterprise employees, contractors, and authorized third parties. These policies apply to all corporate hardware, cloud infrastructure, and network assets.
+
+2. AUTHENTICATION & MULTI-FACTOR AUTHENTICATION (MFA)
+2.1 All employees must authenticate using Okta Single Sign-On (SSO) backed by FIDO2 WebAuthn or push verification.
+2.2 SMS-based verification is strictly deprecated and prohibited for corporate authentication.
+2.3 Passwords must meet minimum complexity standards: at least 14 characters, alphanumeric with special symbols, and must not match the last 5 previous passwords.
+2.4 Passwords expire every 90 days for administrative and privileged accounts.
+
+3. WORKSTATION HARDWARE SECURITY & COMPLIANCE
+3.1 All corporate laptops and workstations must run approved endpoint detection and response (EDR) software (CrowdStrike Falcon).
+3.2 Full disk encryption (FileVault on macOS, BitLocker on Windows 11) must remain enabled at all times.
+3.3 Workstation screens must automatically lock after 5 minutes of inactivity.
+3.4 Non-compliant devices are automatically isolated into the Quarantine VLAN and blocked from internal services until remediated by IT Ops.
+
+4. REMOTE WORK & ZERO TRUST ACCESS
+4.1 Direct SSH and RDP access over the public internet is strictly forbidden.
+4.2 All remote network traffic to staging and production clusters must traverse the Aegis WireGuard Global VPN with Mutual TLS (mTLS).
+4.3 Split-tunneling is restricted: corporate internal subnets (10.240.0.0/16) and cloud VPCs are routed through the VPN tunnel.
+
+5. INCIDENT REPORTING & SECURITY BREACH NOTIFICATION
+5.1 Any suspected phishing attempts, stolen hardware, or anomalous login alerts must be reported within 60 minutes to security@aegis.enterprise or via the Aegis AI Assistant.
+5.2 Unsolicited credential prompts or macro-enabled documents should be immediately forwarded to security-ops@aegis.enterprise for sandbox detonation.

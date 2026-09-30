@@ -1,0 +1,38 @@
+# AEGIS GLOBAL VPN CONFIGURATION & TROUBLESHOOTING GUIDE
+Document ID: NET-VPN-2026-V2
+Department: Network & IT Infrastructure
+Audience: All Remote & Hybrid Employees
+
+1. OVERVIEW
+Aegis Enterprise utilizes WireGuard-based VPN gateways worldwide to provide zero-trust encrypted access to internal resources, source code repositories, and Kubernetes clusters.
+
+2. GATEWAY ENDPOINTS
+- North America East: gateway-east.vpn.aegis.enterprise (UDP port 51820)
+- North America West: gateway-west.vpn.aegis.enterprise (UDP port 51820)
+- Europe Central: gateway-eu.vpn.aegis.enterprise (UDP port 51820)
+- Asia Pacific: gateway-apac.vpn.aegis.enterprise (UDP port 51820)
+
+3. STEP-BY-STEP CONNECTIVITY TROUBLESHOOTING
+If your laptop cannot connect to the company VPN or experiences connection timeouts, follow these steps:
+
+Step 1: Check Local Internet & Wi-Fi
+Ensure you have stable public internet connectivity. Test by visiting https://fast.com or pinging 1.1.1.1. Captive portal Wi-Fi (e.g., hotel or airport Wi-Fi) must be authenticated in a browser before launching the VPN.
+
+Step 2: Verify Gateway Endpoints & Port 51820
+Ensure your firewall or home router does not block UDP outbound traffic on port 51820. If port 51820 is blocked, switch the WireGuard profile to fallback TCP port 443 via the Aegis Connect client tray icon.
+
+Step 3: Re-download or Refresh Client Certificates
+VPN authentication certificates expire every 30 days. If you receive "Error 802: Handshake Timed Out" or "SSL Certificate Verification Error":
+1. Open https://iam.aegis.enterprise/vpn in your browser.
+2. Sign in with Okta SSO and complete MFA.
+3. Click "Regenerate VPN Profile" and download the aegis-client.conf file.
+4. Import the configuration into WireGuard and click Activate.
+
+Step 4: Check Device Compliance Status
+If your laptop OS patch is outdated or CrowdStrike Falcon is disabled, the NAC gateway will reject the tunnel handshake with a 403 Forbidden compliance error. Run the Aegis Health Check utility from your applications menu to confirm compliance.
+
+Step 5: Escalation to IT Help Desk
+If the above steps do not resolve the issue:
+- Note your device serial number and current assigned IP.
+- Take a screenshot of the WireGuard client log or error message.
+- Submit a High Priority ticket to the IT Support Desk with category "Network & VPN".

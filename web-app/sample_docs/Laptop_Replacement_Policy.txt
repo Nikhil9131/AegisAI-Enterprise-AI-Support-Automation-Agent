@@ -1,0 +1,34 @@
+# AEGIS HARDWARE REFRESH & LAPTOP REPLACEMENT POLICY
+Document ID: HW-POL-2026-V3
+Page: 12
+Section: Hardware Replacement & Refresh Lifecycle
+Department: IT Operations & Procurement
+
+1. LAPTOP REPLACEMENT ELIGIBILITY & SCHEDULE
+1.1 Standard Hardware Lifecycle:
+All full-time employees are eligible to request a laptop replacement after 36 months (3 years) of continuous active service with their existing assigned device.
+1.2 Early Replacement Conditions:
+An employee may request an early replacement prior to 36 months under the following certified conditions:
+a) Irreparable hardware failure certified by IT Support Desk diagnostics.
+b) Physical battery expansion or severe battery degradation (maximum capacity below 60% with diagnostic evidence).
+c) Documented job title change or engineering role requiring upgraded compute, RAM (minimum 64GB), or GPU capabilities.
+d) Irretrievable accidental damage covered under enterprise device insurance.
+
+2. STANDARD HARDWARE TIERS & MODELS
+2.1 Tier 1 - Software Engineering & Data Science:
+- Apple MacBook Pro 16-inch (M3 Pro/Max, 36GB Unified RAM, 1TB SSD)
+- Dell XPS 16 / Precision 5680 (Intel Core i9, 64GB RAM, RTX 4070, 1TB SSD)
+2.2 Tier 2 - Product, Design & Marketing:
+- Apple MacBook Pro 14-inch (M3 Pro, 18GB RAM, 512GB SSD)
+- Dell XPS 15 (Intel Core i7, 32GB RAM, 512GB SSD)
+2.3 Tier 3 - General Corporate (Finance, Legal, HR, Operations):
+- ThinkPad T14s Gen 5 / Surface Laptop 6 (16GB RAM, 512GB SSD)
+
+3. HOW TO SUBMIT A REPLACEMENT REQUEST
+3.1 Submit a request via the Aegis AI Support Portal:
+- Navigate to "Create Ticket" and select category "Hardware & Devices".
+- Choose priority "MEDIUM" (or "HIGH" if device is completely inoperable).
+- Provide current device serial number and date of original issue.
+- Department Manager approval is automatically routed through the AI workflow.
+3.2 Upon approval, IT Procurement will dispatch the new device within 3 to 5 business days with pre-installed enterprise MDM profiles.
+3.3 The previous laptop must be backed up to corporate OneDrive/Google Drive and returned using the prepaid shipping kit within 14 calendar days.
