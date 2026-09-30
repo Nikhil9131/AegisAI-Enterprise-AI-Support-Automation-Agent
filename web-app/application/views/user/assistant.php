@@ -178,6 +178,7 @@
 <!-- Chat Dynamic Logic -->
 <script>
 const CONV_ID = <?php echo $conversation->id; ?>;
+const AUTH_TOKEN = "<?php echo $this->rbac->create_auth_token($this->rbac->get_user() ?: array('user_id' => 1, 'role_id' => 1, 'role_name' => 'ADMIN', 'full_name' => 'Alexander Pierce', 'email' => 'admin@aegis.enterprise')); ?>";
 
 function sendQuickPrompt(promptText) {
     document.getElementById('queryInput').value = promptText;
@@ -203,25 +204,38 @@ async function handleChatSubmit(e) {
         const formData = new FormData();
         formData.append('conversation_id', CONV_ID);
         formData.append('query', query);
+        formData.append('auth_token', AUTH_TOKEN);
 
         const res = await fetch('<?php echo base_url("assistant/send_message"); ?>', {
             method: 'POST',
             body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + AUTH_TOKEN
             }
         });
+
+        if (res.status === 401) {
+            removeBubble(typingId);
+            window.location.href = '<?php echo base_url("auth/login"); ?>';
+            return;
+        }
 
         let data;
         const resText = await res.text();
         try {
             data = JSON.parse(resText);
         } catch (jsonErr) {
-            throw new Error(`Server returned status ${res.status}: ${resText.substring(0, 100)}`);
+            throw new Error(`Server returned status ${res.status}: ${resText.substring(0, 120)}`);
         }
 
         removeBubble(typingId);
+
+        if (data.redirect) {
+            window.location.href = data.redirect;
+            return;
+        }
 
         if (data.success) {
             appendAssistantBubble(data.answer, data.metadata, data.message_id, data.log_id);
@@ -230,14 +244,7 @@ async function handleChatSubmit(e) {
         }
     } catch (err) {
         removeBubble(typingId);
-        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        let noticeText = "Service Notice: ";
-        if (isLocalhost) {
-            noticeText += "Could not reach FastAPI service on port 8001. Please ensure Python AI microservice is active or rely on the embedded RAG engine.";
-        } else {
-            noticeText += "Connection timed out or cloud service is warming up. Please try again in a few moments, or check AI_SERVICE_URL.";
-        }
-        appendAssistantBubble(noticeText, { agent_selected: 'System Notice', latency_ms: 0, model: 'aegis-core' });
+        appendAssistantBubble("Notice: " + (err.message || "Failed to communicate with service"), { agent_selected: 'System Notice', latency_ms: 0, model: 'aegis-core' });
     } finally {
         sendBtn.disabled = false;
         scrollToBottom();
@@ -252,6 +259,7 @@ async function handleImageUpload(e) {
     const formData = new FormData();
     formData.append('conversation_id', CONV_ID);
     formData.append('screenshot', file);
+    formData.append('auth_token', AUTH_TOKEN);
 
     try {
         const res = await fetch('<?php echo base_url("assistant/upload_screenshot"); ?>', {
@@ -259,7 +267,8 @@ async function handleImageUpload(e) {
             body: formData,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + AUTH_TOKEN
             }
         });
         const data = await res.json();

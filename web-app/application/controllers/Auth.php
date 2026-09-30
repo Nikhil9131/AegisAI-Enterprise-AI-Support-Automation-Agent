@@ -46,6 +46,8 @@ class Auth extends MY_Controller {
                 'logged_in'  => TRUE
             );
             $this->session->set_userdata($session_data);
+            $token = $this->rbac->create_auth_token($session_data);
+            $this->rbac->set_auth_cookie($token);
             $this->session->set_flashdata('success', 'Welcome back, ' . $user->full_name . '!');
 
             if ($user->role_name === 'ADMIN') {
@@ -130,6 +132,7 @@ class Auth extends MY_Controller {
     }
 
     public function logout() {
+        $this->rbac->clear_auth_cookie();
         $this->session->sess_destroy();
         redirect('auth/login');
     }
